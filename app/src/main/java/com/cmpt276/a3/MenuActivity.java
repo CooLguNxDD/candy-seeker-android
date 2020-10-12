@@ -22,10 +22,8 @@ public class MenuActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //button.setBackgroundResource(R.drawable.button_click);
                 Intent intent = new Intent(MenuActivity.this, MainActivity.class);
                 startActivity(intent);
-
             }
         });
     }
@@ -34,23 +32,23 @@ public class MenuActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                button.setBackgroundResource(R.drawable.button_click);
-                Intent intent = new Intent(MenuActivity.this, MainActivity.class);
+                Intent intent = new Intent(MenuActivity.this, SettingActivity.class);
                 startActivity(intent);
-
             }
         });
+
     }
     private void helpButton(){
-        final Button button = (Button)findViewById(R.id.setting_button);
+        final Button button = (Button)findViewById(R.id.help_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                button.setBackgroundResource(R.drawable.button_click);
+
                 Intent intent = new Intent(MenuActivity.this, MainActivity.class);
                 startActivity(intent);
 
             }
         });
+
     }
 }

@@ -22,6 +22,15 @@ public class WelcomeActivity extends AppCompatActivity {
         Animation fade_in = AnimationUtils.loadAnimation(this,R.anim.fade_in);
         image.startAnimation(fade_in);
 
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(WelcomeActivity.this, MenuActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        },time);
+
         final Button button = (Button) findViewById(R.id.skip_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,14 +41,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 finish();
             }
         });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(WelcomeActivity.this, MenuActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        },time);
+
 
     }
 }

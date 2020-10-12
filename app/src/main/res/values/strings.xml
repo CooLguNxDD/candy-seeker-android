@@ -6,4 +6,6 @@
     <string name="play">Play</string>
     <string name="setting">Setting</string>
     <string name="help">Help</string>
+    <string name="board">Board Size</string>
+    <string name="num_of_mines"># of Mines</string>
 </resources>
