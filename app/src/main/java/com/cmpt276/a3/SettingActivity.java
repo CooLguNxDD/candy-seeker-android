@@ -57,9 +57,6 @@ public class SettingActivity extends AppCompatActivity {
         Spinner boardSpinner = (Spinner)findViewById(R.id.board_spinner);
         ArrayAdapter<boardSpinnerClass> boardAdopter = new BoardAdapter(SettingActivity.this,
                 android.R.layout.simple_spinner_item, boardSizes);
-        // try merge lol???
-
-
 
 
         boardSpinner.setAdapter(boardAdopter);

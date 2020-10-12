@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ButtonStatus[][] buttons;
     private int remainMines;
     private int clickNum = 0;
+    // try merge branch 1 lol???
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
