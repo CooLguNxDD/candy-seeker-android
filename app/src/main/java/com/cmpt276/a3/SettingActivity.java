@@ -52,22 +52,15 @@ public class SettingActivity extends AppCompatActivity {
         setOkButton();
 
     }
-    private void setOkButton(){
-        Button ok_button = (Button)findViewById(R.id.ok_button);
-        ok_button.setBackgroundResource(R.drawable.button_ripper);
-        ok_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SettingActivity.this, MenuActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-    }
+
     private void setBoardSpinner(){
         Spinner boardSpinner = (Spinner)findViewById(R.id.board_spinner);
         ArrayAdapter<boardSpinnerClass> boardAdopter = new BoardAdapter(SettingActivity.this,
                 android.R.layout.simple_spinner_item, boardSizes);
+        // try merge lol???
+
+
+
 
         boardSpinner.setAdapter(boardAdopter);
         boardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -83,6 +76,18 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+    }
+    private void setOkButton(){
+        Button ok_button = (Button)findViewById(R.id.ok_button);
+        ok_button.setBackgroundResource(R.drawable.button_ripper);
+        ok_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingActivity.this, MenuActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
