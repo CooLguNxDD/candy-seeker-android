@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">a3</string>
+    <string name="mines">Found %d of %d mines.</string>
+    <string name="creator">by Andrew Liang</string>
+    <string name="skip">Skip</string>
+    <string name="play">Play</string>
+    <string name="setting">Setting</string>
+    <string name="help">Help</string>
+</resources>
