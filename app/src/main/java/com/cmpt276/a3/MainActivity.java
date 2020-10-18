@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         settings = getSharedPreferences(SAVESETTING, Context.MODE_PRIVATE);
 
-        config = new GameConfig(settings.getInt("row",4),settings.getInt("col",4),settings.getInt("mines",8));
+        config = new GameConfig(settings.getInt("row",4),settings.getInt("col",6),settings.getInt("mines",8));
         buttons = new ButtonStatus[config.getRow()][config.getCol()];
         remainMines = config.getMines();
         clickNum = 0;
@@ -167,15 +167,22 @@ public class MainActivity extends AppCompatActivity {
         //setting the status of each button and text
         setTextField();
         for(int row = 0; row < config.getRow(); row++){
-            int rowMinesNums = 0;
             for (int col = 0; col< config.getCol(); col++){
-                if(buttons[row][col].is_mines()){
-                    rowMinesNums += 1;
+                int rowMinesNums = 0;
+                int colMinesNums = 0;
+
+                for(int rowCheck = 0; rowCheck< config.getRow(); rowCheck++){ // scan row
+                    if(buttons[rowCheck][col].is_mines()){
+                        rowMinesNums ++;
+                    }
                 }
-            }
-            for (int col = 0; col< config.getCol(); col++){
-                if (buttons[row][col].isClicked()){
-                    buttons[row][col].getButton().setText(""+rowMinesNums);
+                for(int colCheck = 0; colCheck< config.getCol(); colCheck++){ // scan row
+                    if(buttons[row][colCheck].is_mines()){
+                        rowMinesNums ++;
+                    }
+                }
+                if (buttons[row][col].isClicked()) {
+                    buttons[row][col].getButton().setText(String.format("%d", colMinesNums + rowMinesNums));
                 }
             }
         }
