@@ -46,7 +46,7 @@ public class BoardAdapter extends ArrayAdapter<boardSpinnerClass> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         TextView text = (TextView) super.getView(position,convertView,parent);
-        text.setText(boardSpinner.get(position).getDescription());
+        text.setText(boardSpinner.get(position).getDescription()); // set up text
         text.setTextColor(Color.WHITE);
         text.setTextSize(20);
         return text;
@@ -54,7 +54,7 @@ public class BoardAdapter extends ArrayAdapter<boardSpinnerClass> {
 
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        TextView text = (TextView) super.getView(position,convertView,parent);
+        TextView text = (TextView) super.getView(position,convertView,parent); // set up text
         text.setText(boardSpinner.get(position).getDescription());
         text.setTextSize(20);
         return text;

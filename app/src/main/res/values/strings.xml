@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">a3</string>
+    <string name="app_name">Candy Seeker</string>
     <string name="mines">Found %d of %d mines.</string>
     <string name="creator">by Andrew Liang</string>
     <string name="skip">Skip</string>
@@ -17,5 +17,11 @@
     <string name="game_des_5">4. You Win! when you seek all the candies</string>
     <string name="game_des_6">5. You can set the board size and the # of Mines on the setting pages</string>
     <string name="game_des_7">6. Good Luck, Have Fun!</string>
+    <string name="reset_button_text">Reset Saved Data</string>
+
+    <string name="bg_link">Background:  <a href='https://www.freepik.com/photos/food'>Food photo created by freepik - www.freepik.com</a></string>
+    <string name="box_link">Box Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a></string>
+    <string name="candy_link">Candy Icons by:  <a href='https://www.iconspng.com/uploads/candy-icon/candy-icon.png'>Link</a></string>
+    <string name="ok_text">ok</string>
 
 </resources>

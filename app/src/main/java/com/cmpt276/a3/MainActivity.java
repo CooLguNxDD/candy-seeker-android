@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.cmpt276.a3.Model.ButtonStatus;
 import com.cmpt276.a3.Model.GameConfig;
+import com.cmpt276.a3.game.gameFunction;
 
 import java.util.Locale;
 import java.util.Random;
@@ -41,21 +42,32 @@ public class MainActivity extends AppCompatActivity {
 
     private String bestScore;
     private Vibrator vibrator;
-    // try merge branch 1 lol???
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // get setting from SharedPreferences
         settings = getSharedPreferences(SAVESETTING, Context.MODE_PRIVATE);
 
+        //config class will save : row, column, # of mines
         config = new GameConfig(settings.getInt("row",4),settings.getInt("col",6),settings.getInt("mines",8));
-        buttons = new ButtonStatus[config.getRow()][config.getCol()];
-        remainMines = config.getMines();
-        clickNum = 0;
-        totalGame = settings.getInt("games",0);
-        bestScore = ""+config.getRow()+""+config.getCol()+""+config.getMines();
 
+        //button status class -> save Button, is a mines or not , is clicked or not
+        //isClicked will not be true with a button click
+        buttons = new ButtonStatus[config.getRow()][config.getCol()];
+
+        //track mines remain
+        remainMines = config.getMines();
+
+        //track scans
+        clickNum = 0;
+
+        //total game and bestScore setup
+        totalGame = settings.getInt("games",0);
+        bestScore = ""+config.getRow()+"x"+config.getCol()+" mines "+config.getMines();
+
+        // click return button will shows a popup window to tell player leave or not
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -64,18 +76,20 @@ public class MainActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        createButtons();
-        RandomMines(config.getMines());
-        setInfo(); //initial game
+        createButtons(); //button array
+        setTextField(); //setup text
+        buttons = gameFunction.RandomMines(config.getMines(),config,buttons); //set random mines
+        buttons = gameFunction.setInfo(config, buttons);//initial game
 
         vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
     }
     private void setTextField(){
+        //setup the textField
         TextView mines = (TextView) findViewById(R.id.mines_text);
         TextView scan = (TextView) findViewById(R.id.scan_text);
         TextView best= (TextView)findViewById(R.id.best_score);
         TextView total= (TextView)findViewById(R.id.total_game);
-        best.setText(String.format(Locale.CANADA,"Best Score: %d", settings.getInt(bestScore, 0)));
+        best.setText(String.format(Locale.CANADA,"Mode: "+ bestScore +"   Best Score: %d", settings.getInt(bestScore, 0)));
         mines.setText(String.format(Locale.CANADA,"Found %d of %d mines.", config.getMines()-remainMines, config.getMines()));
         scan.setText(String.format(Locale.CANADA,"# Scans used: %d", clickNum));
         total.setText(String.format(Locale.CANADA,"Total Games: %d", totalGame ));
@@ -103,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         1.0f
                 ));
 
+                //button config
                 button.setTextSize(20);
                 button.setTextColor(Color.WHITE);
                 button.setBackgroundResource(R.drawable.box_ripper);
@@ -126,25 +141,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void gridButtonClicked(int row, int col){
-        //click event
-        updateInfo(row,col);
+        //click event on grid button
 
-        if (remainMines ==0){ //win
+        updateInfo(row,col); //update info every time player clicked a button
+
+        if (gameFunction.checkWin(remainMines)){ //win
             SharedPreferences.Editor editor = settings.edit();
             totalGame +=1;//update total game
             editor.putInt("games" , totalGame);
-            editor.apply();
+            editor.apply();//save
+
             if (settings.getInt(bestScore,0)>clickNum || settings.getInt(bestScore,0)==0){
                 editor.putInt(bestScore,clickNum);
-                editor.apply();
+                editor.apply(); //popup window for best score
                 popup("GG! You Win with best score, Scanned fields: "+ clickNum,this,true);
             }
             else{
+                //popup window for best score
                 popup("GG! You Win, Scanned fields: "+ clickNum,this,true);
             }
         }
     }
     private void lockButtonSize(){
+        // lock button size to prevent resize
         for(int row = 0; row < config.getRow(); row++){
             for (int col = 0; col< config.getCol(); col++) {
                 Button button =buttons[row][col].getButton();
@@ -162,80 +181,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMinesIcons(Button button){
-        //set mines image and scale image:
+        //set candy image and scale it:
         int buttonWidth = button.getWidth();
         int buttonHeight = button.getHeight();
 
         button.setBackgroundResource(R.drawable.candy_icon);
 
         button.setHeight(buttonHeight);
-        button.setWidth(buttonWidth-100); //since i have lock the width,
-        // -100 will help prevent the image being big lol. Thanks Android.
+        button.setWidth(buttonWidth-100); //Since i have locked the width,
+        // -100 will help prevent the image being resize lol. Thanks Android.
     }
-    private void RandomMines(int mines){
-        //generate random mines
-        Random rand = new Random();
-        int unsetMines = mines;
-        int nextRow,nexCol;
-        while (unsetMines >0){
-            nextRow  = rand.nextInt(config.getRow());
-            nexCol = rand.nextInt(config.getCol());
-            if (!buttons[nextRow][nexCol].is_mines()){
-                buttons[nextRow][nexCol].set_Is_mines(true);
-                unsetMines-=1;
-            }
-        }
-    }
-    private void setInfo(){
-        //setting the status of each button and text
-        setTextField();
-        for(int row = 0; row < config.getRow(); row++){
-            for (int col = 0; col< config.getCol(); col++){
-                int rowMinesNums = 0;
-                int colMinesNums = 0;
 
-                for(int rowCheck = 0; rowCheck< config.getRow(); rowCheck++){ // scan row
-                    if(buttons[rowCheck][col].is_mines()){
-                        rowMinesNums ++;
-                    }
-                }
-                for(int colCheck = 0; colCheck< config.getCol(); colCheck++){ // scan row
-                    if(buttons[row][colCheck].is_mines()){
-                        rowMinesNums ++;
-                    }
-                }
-                if (buttons[row][col].isClicked()) {
-                    buttons[row][col].getButton().setText(String.format("%d", colMinesNums + rowMinesNums));
-                }
-            }
-        }
-    }
     private void updateInfo(int clickRow, int clickCol){
         //update the button[row][col] info:
         // if it is a mine -> set mines image
         // else display the # of mines on that row
 
         // each button can only be clicked once
-        // lock button size on every click
+
         ButtonStatus status = buttons[clickRow][clickCol];
         Button selectButton = status.getButton();
-        selectButton.setClickable(false); //lock button after a click
+        selectButton.setClickable(false); //disable button after a click
 
-        if(!status.isClicked()){
-            if(status.is_mines()){
-                setMinesIcons(selectButton);
+        if(!status.isClicked()){  //the button is not yet clicked
+            if(status.is_mines()){  // is a mine
+                setMinesIcons(selectButton); //set up
                 status.set_Is_mines(false);
                 remainMines -=1;
                 clickNum +=1;
-                //not scale with text
                 vibrator.vibrate(400);
-                setInfo();
+
+                buttons = gameFunction.setInfo(config,buttons); //update information
+                setTextField();
             }
             else{
                 clickNum +=1;
                 vibrator.vibrate(50);
-                status.setClicked(true);
-                setInfo();
+                status.setClicked(true); //already clicked
+                buttons = gameFunction.setInfo(config,buttons); //update information
+                setTextField();
             }
         }
     }

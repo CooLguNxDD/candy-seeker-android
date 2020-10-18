@@ -2,9 +2,9 @@ package com.cmpt276.a3.Model;
 
 public class GameConfig {
 
-    private int row = 8;
-    private int col = 4;
-    private int mines = 8;
+    private int row, col, mines;
+
+    //size of the board and # of mines
 
     public GameConfig(int row, int col, int mines){
         this.col = col;

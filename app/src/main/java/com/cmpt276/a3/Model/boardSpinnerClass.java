@@ -5,6 +5,14 @@ public class boardSpinnerClass {
     private int row;
     private int col;
 
+
+    //this class is used to assist the board spinner adopter to store extra values
+    //it stores:
+    // description -> e.g 4x6
+    // row -> e.g 5
+    // col -> e.g 10
+
+
     public boardSpinnerClass(String description, int row, int col) {
         this.description = description;
         this.row = row;
