@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private int clickNum,totalGame;
 
     private String bestScore;
+    private Vibrator vibrator;
     // try merge branch 1 lol???
 
     @Override
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         createButtons();
         RandomMines(config.getMines());
         setInfo(); //initial game
+
+        vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
     }
     private void setTextField(){
         TextView mines = (TextView) findViewById(R.id.mines_text);
@@ -89,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             ));
 
             table.addView(tableRow);
-
             //set up button
             for (int col = 0; col <  config.getCol(); col++){
                 Button button = new Button(this);
@@ -119,11 +122,13 @@ public class MainActivity extends AppCompatActivity {
                 buttons[row][col] = new ButtonStatus(button,false,false);
             }
         }
+        lockButtonSize();
     }
 
     private void gridButtonClicked(int row, int col){
         //click event
         updateInfo(row,col);
+
         if (remainMines ==0){ //win
             SharedPreferences.Editor editor = settings.edit();
             totalGame +=1;//update total game
@@ -139,6 +144,22 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    private void lockButtonSize(){
+        for(int row = 0; row < config.getRow(); row++){
+            for (int col = 0; col< config.getCol(); col++) {
+                Button button =buttons[row][col].getButton();
+                int width = button.getWidth();
+                int height = button.getHeight();
+                button.setWidth(width);
+                button.setHeight(height);
+                button.setMaxHeight(height);
+                button.setMinHeight(height);
+                button.setMaxWidth(width);
+                button.setMinWidth(width);
+            }
+        }
+
+    }
 
     private void setMinesIcons(Button button){
         //set mines image and scale image:
@@ -146,8 +167,10 @@ public class MainActivity extends AppCompatActivity {
         int buttonHeight = button.getHeight();
 
         button.setBackgroundResource(R.drawable.candy_icon);
+
         button.setHeight(buttonHeight);
-        button.setWidth(buttonWidth);
+        button.setWidth(buttonWidth-100); //since i have lock the width,
+        // -100 will help prevent the image being big lol. Thanks Android.
     }
     private void RandomMines(int mines){
         //generate random mines
@@ -205,10 +228,12 @@ public class MainActivity extends AppCompatActivity {
                 remainMines -=1;
                 clickNum +=1;
                 //not scale with text
+                vibrator.vibrate(400);
                 setInfo();
             }
             else{
                 clickNum +=1;
+                vibrator.vibrate(50);
                 status.setClicked(true);
                 setInfo();
             }
