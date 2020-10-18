@@ -45,9 +45,9 @@ public class SettingActivity extends AppCompatActivity {
         //       - 4 rows by 6 columns
         //       - 5 rows by 10 columns
         //       - 6 rows by 15 columns
-        boardSizes.add(new boardSpinnerClass("4x6", 4,6));
-        boardSizes.add(new boardSpinnerClass("5x10", 5,10));
-        boardSizes.add(new boardSpinnerClass("6x15", 6,15));
+        boardSizes.add(new boardSpinnerClass("4 rows by 6 columns", 4,6));
+        boardSizes.add(new boardSpinnerClass("5 rows by 10 columns", 5,10));
+        boardSizes.add(new boardSpinnerClass("6 rows by 15 columns", 6,15));
 
         // num of mines - 6,8,10,15,20
         minesNum.add(6);
