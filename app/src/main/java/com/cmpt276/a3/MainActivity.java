@@ -7,35 +7,28 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.cmpt276.a3.Model.ButtonStatus;
-import com.cmpt276.a3.Model.GameConfig;
+import com.cmpt276.a3.Model.Singleton;
 import com.cmpt276.a3.game.gameFunction;
 
 import java.util.Locale;
-import java.util.Random;
 
 import static com.cmpt276.a3.Model.Singleton.SAVESETTING;
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences settings;
 
-    private GameConfig config;
+    private Singleton config;
     private ButtonStatus[][] buttons;
     private int remainMines;
     private int clickNum,totalGame;
@@ -51,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         settings = getSharedPreferences(SAVESETTING, Context.MODE_PRIVATE);
 
         //config class will save : row, column, # of mines
-        config = new GameConfig(settings.getInt("row",4),settings.getInt("col",6),settings.getInt("mines",8));
+        config = new Singleton(settings.getInt("row",4),settings.getInt("col",6),settings.getInt("mines",8));
 
         //button status class -> save Button, is a mines or not , is clicked or not
         //isClicked will not be true with a button click

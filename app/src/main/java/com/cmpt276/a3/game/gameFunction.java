@@ -1,9 +1,7 @@
 package com.cmpt276.a3.game;
 
-import android.widget.Button;
-
 import com.cmpt276.a3.Model.ButtonStatus;
-import com.cmpt276.a3.Model.GameConfig;
+import com.cmpt276.a3.Model.Singleton;
 
 import java.util.Random;
 
@@ -13,7 +11,7 @@ public class gameFunction {
     //perform scan
     //check win condition
 
-    public static ButtonStatus[][] RandomMines(int mines, GameConfig config, ButtonStatus[][] buttons){
+    public static ButtonStatus[][] RandomMines(int mines, Singleton config, ButtonStatus[][] buttons){
         //generate random mines
         Random rand = new Random();
         int unsetMines = mines;
@@ -28,7 +26,7 @@ public class gameFunction {
         }
         return buttons;
     }
-    public static ButtonStatus[][] setInfo(GameConfig config, ButtonStatus[][] buttons){
+    public static ButtonStatus[][] setInfo(Singleton config, ButtonStatus[][] buttons){
         //perform search of mines
         //update the status of buttons
 
