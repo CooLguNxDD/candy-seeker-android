@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmpt276.a3.Model.BoardAdapter;
@@ -36,24 +38,27 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting2);
         save = getSharedPreferences(SAVESETTING, Context.MODE_PRIVATE);
 
-        //- 4 rows by 6 columns
-         //       - 5 rows by 10 columns
-          //      - 6 rows by 15 columns
+        //       - 4 rows by 6 columns
+        //       - 5 rows by 10 columns
+        //       - 6 rows by 15 columns
         boardSizes.add(new boardSpinnerClass("4x6", 4,6));
         boardSizes.add(new boardSpinnerClass("5x10", 5,10));
         boardSizes.add(new boardSpinnerClass("6x15", 6,15));
-        setBoardSpinner();
+
+        // num of mines - 6,8,10,15,20
         minesNum.add(6);
         minesNum.add(8);
         minesNum.add(10);
         minesNum.add(15);
         minesNum.add(20);
+        setBoardSpinner();
         setMinepinner();
         setOkButton();
 
     }
 
     private void setBoardSpinner(){
+        // board spinner with custom adapter using boardSpinnerClass
         Spinner boardSpinner = (Spinner)findViewById(R.id.board_spinner);
         ArrayAdapter<boardSpinnerClass> boardAdopter = new BoardAdapter(SettingActivity.this,
                 android.R.layout.simple_spinner_item, boardSizes);
@@ -77,6 +82,7 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
     private void setOkButton(){
+        // set ok button that return to menu
         Button ok_button = (Button)findViewById(R.id.ok_button);
         ok_button.setBackgroundResource(R.drawable.button_ripper);
         ok_button.setOnClickListener(new View.OnClickListener() {
@@ -89,14 +95,16 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
     private void setMinepinner(){
-        Spinner boardSpinner = (Spinner)findViewById(R.id.mine_spinner);
+        // mine spinner!!!
+        Spinner mineSpinner = (Spinner)findViewById(R.id.mine_spinner);
         ArrayAdapter<Integer> Adopter = new ArrayAdapter<Integer>(SettingActivity.this,
-                android.R.layout.simple_spinner_item, minesNum);
+                R.layout.spinner_item, minesNum);
 
-        boardSpinner.setAdapter(Adopter);
-        boardSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mineSpinner.setAdapter(Adopter);
+        mineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) adapterView.getChildAt(0)).setTextColor(Color.WHITE);
                 Toast.makeText(getApplicationContext(),
                         "Selected Mines: "+(""+minesNum.get(i)), Toast.LENGTH_SHORT).show();
                 SharedPreferences.Editor editor = save.edit();

@@ -1,10 +1,15 @@
 package com.cmpt276.a3.Model;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+
+import com.cmpt276.a3.R;
 
 import java.util.ArrayList;
 
@@ -42,6 +47,8 @@ public class BoardAdapter extends ArrayAdapter<boardSpinnerClass> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         TextView text = (TextView) super.getView(position,convertView,parent);
         text.setText(boardSpinner.get(position).getDescription());
+        text.setTextColor(Color.WHITE);
+        text.setTextSize(20);
         return text;
 }
 
@@ -49,6 +56,7 @@ public class BoardAdapter extends ArrayAdapter<boardSpinnerClass> {
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         TextView text = (TextView) super.getView(position,convertView,parent);
         text.setText(boardSpinner.get(position).getDescription());
+        text.setTextSize(20);
         return text;
     }
 }

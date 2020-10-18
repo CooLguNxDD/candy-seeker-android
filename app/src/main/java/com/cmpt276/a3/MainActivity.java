@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private GameConfig config;
     private ButtonStatus[][] buttons;
     private int remainMines;
-    private int clickNum = 0;
+    private int clickNum,totalGame;
+
+    private String bestScore;
     // try merge branch 1 lol???
 
     @Override
@@ -47,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         buttons = new ButtonStatus[config.getRow()][config.getCol()];
         remainMines = config.getMines();
         clickNum = 0;
+        totalGame = settings.getInt("games",0);
+        bestScore = ""+config.getRow()+""+config.getCol()+""+config.getMines();
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -64,17 +70,17 @@ public class MainActivity extends AppCompatActivity {
         TextView mines = (TextView) findViewById(R.id.mines_text);
         TextView scan = (TextView) findViewById(R.id.scan_text);
         TextView best= (TextView)findViewById(R.id.best_score);
-        String bestScore = ""+config.getRow()+""+config.getCol()+""+config.getMines();
+        TextView total= (TextView)findViewById(R.id.total_game);
         best.setText(String.format(Locale.CANADA,"Best Score: %d", settings.getInt(bestScore, 0)));
         mines.setText(String.format(Locale.CANADA,"Found %d of %d mines.", config.getMines()-remainMines, config.getMines()));
         scan.setText(String.format(Locale.CANADA,"# Scans used: %d", clickNum));
+        total.setText(String.format(Locale.CANADA,"Total Games: %d", totalGame ));
     }
     private void createButtons(){
         //set up game layout
         TableLayout table = (TableLayout) findViewById(R.id.game_table);
         for (int row = 0; row < config.getRow(); row++){
             TableRow tableRow = new TableRow(this);
-
             //scale table rows
             tableRow.setLayoutParams(new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.MATCH_PARENT,
@@ -93,9 +99,12 @@ public class MainActivity extends AppCompatActivity {
                         TableRow.LayoutParams.MATCH_PARENT,
                         1.0f
                 ));
-                button.setBackgroundResource(R.drawable.game_button_ripper);
-                //not scale with text
-                button.setPadding(0,0,0,0);
+
+                button.setTextSize(20);
+                button.setTextColor(Color.WHITE);
+                button.setBackgroundResource(R.drawable.box_ripper);
+                button.setPadding(0,0,0,0); //not scale with text
+
                 final int currentRows = row;
                 final int currentCols = col;
                 //click event
@@ -105,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                         gridButtonClicked(currentRows,currentCols);
                     }
                 });
-
                 //add button to array
                 tableRow.addView(button);
                 buttons[row][col] = new ButtonStatus(button,false,false);
@@ -116,9 +124,11 @@ public class MainActivity extends AppCompatActivity {
     private void gridButtonClicked(int row, int col){
         //click event
         updateInfo(row,col);
-        if (remainMines ==0){
+        if (remainMines ==0){ //win
             SharedPreferences.Editor editor = settings.edit();
-            String bestScore = ""+config.getRow()+""+config.getCol()+""+config.getMines();
+            totalGame +=1;//update total game
+            editor.putInt("games" , totalGame);
+            editor.apply();
             if (settings.getInt(bestScore,0)>clickNum || settings.getInt(bestScore,0)==0){
                 editor.putInt(bestScore,clickNum);
                 editor.apply();
@@ -127,39 +137,23 @@ public class MainActivity extends AppCompatActivity {
             else{
                 popup("GG! You Win, Scanned fields: "+ clickNum,this,true);
             }
-
         }
     }
 
     private void setMinesIcons(Button button){
-        //set mines image and scale image by Dr.Brain Fraser:
+        //set mines image and scale image:
         int buttonWidth = button.getWidth();
         int buttonHeight = button.getHeight();
-        Bitmap originImage = BitmapFactory.decodeResource(getResources(), R.drawable.mines_icon);
-        Bitmap scaleImage = Bitmap.createScaledBitmap(originImage,buttonWidth,buttonHeight,true);
-        Resources resources = getResources();
-        button.setBackground(new BitmapDrawable(resources,scaleImage));
-    }
-    private void lockButtonSize(){
-        //lock button size by Dr.Brain Fraser:
-        for(int row = 0; row < config.getRow(); row++){
-            for (int col = 0; col< config.getCol(); col++){
-                Button button = buttons[row][col].getButton();
-                int buttonWidth = button.getWidth();
-                button.setMinWidth(buttonWidth);
-                button.setMaxWidth(buttonWidth);
-                int buttonHeight = button.getHeight();
-                button.setMaxHeight(buttonHeight);
-                button.setMinHeight(buttonHeight);
-            }
-        }
+
+        button.setBackgroundResource(R.drawable.candy_icon);
+        button.setHeight(buttonHeight);
+        button.setWidth(buttonWidth);
     }
     private void RandomMines(int mines){
         //generate random mines
         Random rand = new Random();
         int unsetMines = mines;
-        int nextRow = 0;
-        int nexCol = 0;
+        int nextRow,nexCol;
         while (unsetMines >0){
             nextRow  = rand.nextInt(config.getRow());
             nexCol = rand.nextInt(config.getCol());
@@ -193,14 +187,13 @@ public class MainActivity extends AppCompatActivity {
 
         // each button can only be clicked once
         // lock button size on every click
-        lockButtonSize();
-
         ButtonStatus status = buttons[clickRow][clickCol];
+        Button selectButton = status.getButton();
+        selectButton.setClickable(false); //lock button after a click
+
         if(!status.isClicked()){
             if(status.is_mines()){
-                Button selectButton = status.getButton();
                 setMinesIcons(selectButton);
-                selectButton.setClickable(false); //cant click
                 status.set_Is_mines(false);
                 remainMines -=1;
                 clickNum +=1;
@@ -210,12 +203,12 @@ public class MainActivity extends AppCompatActivity {
             else{
                 clickNum +=1;
                 status.setClicked(true);
-                status.getButton().setClickable(false); //cant click
                 setInfo();
             }
         }
     }
     private void popup(String msg, Context context, final boolean is_finished){
+        //popup information when player win
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view;
         view = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialog, null);
@@ -236,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         pop.show();
     }
     private void popupOption(String msg, Context context){
+        //when player click return button
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(msg);
         builder.setCancelable(true);

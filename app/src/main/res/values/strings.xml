@@ -8,4 +8,14 @@
     <string name="help">Help</string>
     <string name="board">Board Size</string>
     <string name="num_of_mines"># of Mines</string>
+    <string name="course_web"><a href="https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt276/home">Link to Course Website</a></string>
+    <string name="course_web_pres">Link to Course Website</string>
+    <string name="game_des_1">In this game, you are asked to seeking all the candy within boxes!!!</string>
+    <string name="game_des_2">1. Click on the box to seek Candies</string>
+    <string name="game_des_3">2. If box contain a candy, a candy will shows up</string>
+    <string name="game_des_4">3. If box not contain a candy, it will shows the remain candies on that row</string>
+    <string name="game_des_5">4. You Win! when you seek all the candies</string>
+    <string name="game_des_6">5. You can set the board size and the # of Mines on the setting pages</string>
+    <string name="game_des_7">6. Good Luck, Have Fun!</string>
+
 </resources>
