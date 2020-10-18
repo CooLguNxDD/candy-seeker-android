@@ -5,7 +5,10 @@ import android.widget.Button;
 public class ButtonStatus {
     private Button button;
     private boolean is_mines, clicked;
-    //button status class -> save Button, button is a mines or not , button is clicked or not
+    //button status class ->
+    // save Button,
+    // button is a mines or not
+    // button is clicked or not
     public ButtonStatus(Button button, boolean is_mines, boolean clicked) {
         this.button = button;
         this.is_mines = is_mines;

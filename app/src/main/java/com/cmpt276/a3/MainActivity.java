@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.cmpt276.a3.Model.ButtonStatus;
 import com.cmpt276.a3.Model.Singleton;
-import com.cmpt276.a3.game.gameFunction;
+import com.cmpt276.a3.Model.game.gameFunction;
 
 import java.util.Locale;
 
@@ -55,9 +55,14 @@ public class MainActivity extends AppCompatActivity {
 
         //track scans
         clickNum = 0;
+        //add one to total game
 
         //total game and bestScore setup
         totalGame = settings.getInt("games",0);
+        SharedPreferences.Editor editor = settings.edit();
+        totalGame ++; //update total game
+        editor.putInt("games" , totalGame);
+        editor.apply();//save
         bestScore = ""+config.getRow()+"x"+config.getCol()+" mines "+config.getMines();
 
         // click return button will shows a popup window to tell player leave or not
@@ -140,10 +145,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (gameFunction.checkWin(remainMines)){ //win
             SharedPreferences.Editor editor = settings.edit();
-            totalGame +=1;//update total game
-            editor.putInt("games" , totalGame);
-            editor.apply();//save
-
             if (settings.getInt(bestScore,0)>clickNum || settings.getInt(bestScore,0)==0){
                 editor.putInt(bestScore,clickNum);
                 editor.apply(); //popup window for best score

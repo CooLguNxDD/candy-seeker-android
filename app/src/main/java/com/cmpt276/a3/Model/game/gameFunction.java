@@ -1,4 +1,4 @@
-package com.cmpt276.a3.game;
+package com.cmpt276.a3.Model.game;
 
 import com.cmpt276.a3.Model.ButtonStatus;
 import com.cmpt276.a3.Model.Singleton;

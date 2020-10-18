@@ -25,6 +25,9 @@ public class BoardAdapter extends ArrayAdapter<boardSpinnerClass> {
         this.context = context;
         this.boardSpinner = boardSpinnerClass;
     }
+    //custom adopter using boardSpinnerClass
+    // drop down menu will show descriptions
+    // and return descriptions, rows, col as boardSpinnerClass
 
     @Override
     public int getCount() {

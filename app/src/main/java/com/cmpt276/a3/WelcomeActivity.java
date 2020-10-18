@@ -2,6 +2,8 @@ package com.cmpt276.a3;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class WelcomeActivity extends AppCompatActivity {
-    private static final int time = 5000;
+    private static final int time = 7000;
     private boolean screenSwitch = false;
     private Handler handler;
     private Runnable runnable;
@@ -26,8 +28,14 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ImageView image = (ImageView) findViewById(R.id.welcome_image);
+        ConstraintLayout layout = (ConstraintLayout)findViewById(R.id.layout_bg);
+
         Animation fade_in = AnimationUtils.loadAnimation(this,R.anim.fade_in);
-        image.startAnimation(fade_in);   // fade in animation
+        Animation rotate = AnimationUtils.loadAnimation(this,R.anim.rotation);
+        layout.startAnimation(fade_in);
+        image.startAnimation(rotate);
+        //image.startAnimation(fade_in);   // fade in animation
+
 
         vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
 

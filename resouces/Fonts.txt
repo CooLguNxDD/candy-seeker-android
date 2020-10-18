@@ -1,9 +1,0 @@
-Fonts used in this design:
-
-Font: Lobster
-Author: Impallari Type
-Url: http://www.fontsquirrel.com/fonts/lobster
-
-Font: Vollkorn
-Author: FRiTZe
-Url: http://www.fontsquirrel.com/fonts/vollkorn
