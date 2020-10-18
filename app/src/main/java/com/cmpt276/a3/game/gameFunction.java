@@ -58,4 +58,8 @@ public class gameFunction {
     public static boolean checkWin(int remainMines){
         return remainMines == 0;
     }
+
+
+
+    // a test merge for finalv1.2 lol it is time to merge!!!!!
 }
